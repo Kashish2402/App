@@ -29,7 +29,7 @@ function Navbar() {
 
   return (
     <div
-      className={`w-full border-b rounded-b-2xl border-b-gray-800 shadow-2xl p-2 py-4 flex md:px-10 justify-between items-center`}
+      className={`w-full h-[7vh] border-b rounded-b-2xl border-b-gray-800 shadow-2xl p-2 py-4 flex md:px-10 justify-between items-center`}
     >
       <div className="cursor-pointer" onClick={() => navigate("/")}>
         <span className="font-black text-xl italic text-purple-600 opacity-65">

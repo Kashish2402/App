@@ -24,7 +24,7 @@ function Login() {
     <div className="w-full h-full">
       <Navbar />
 
-      <div className="w-full  h-[88%] mt-2 flex items-center justify-center divide-x divide-gray-500/10">
+      <div className="w-full h-[92vh] md:h-[72vh]  mt-2 flex items-center justify-center divide-x divide-gray-500/10">
         <div className="h-full w-full md:w-1/2 lg:w-[35%]  px-8 flex flex-col items-center justify-center gap-8 ">
           <div className="bg-purple-500/10 rounded-xl p-3 cursor-pointer">
             <MessageSquare className="size-10 text-purple-900" />

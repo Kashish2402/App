@@ -1,8 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
-import { data } from "react-router-dom";
-import { act } from "react";
+
 
 export const getUser = createAsyncThunk(
   "auth/getUser",

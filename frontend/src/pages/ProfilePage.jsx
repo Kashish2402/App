@@ -37,7 +37,7 @@ function ProfilePage() {
     <div className="h-full w-full">
       <Navbar />
 
-      <div className="w-full h-[88%] flex justify-center items-center">
+      <div className="w-full h-[92vh] md:h-[72vh] flex justify-center items-center">
         <div className="w-full md:w-1/2 flex flex-col justify-center items-center gap-5">
           <div className="flex flex-col items-center text-white">
             <h1 className="font-bold text-2xl">Profile</h1>
@@ -85,7 +85,7 @@ function ProfilePage() {
                   className={`w-full bg-black py-1 px-4 rounded-2xl border border-white/20 ${
                     !isEditable && "opacity-35"
                   }`}
-                  disable={!isEditable}
+                  disabled={!isEditable}
                 />
 
                 <div className="absolute top-1.5 right-2.5">

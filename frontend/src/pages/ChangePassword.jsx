@@ -21,7 +21,7 @@ const dispatch=useDispatch()
     <div className="w-full h-full">
       <Navbar />
 
-      <div className="w-full h-[80%] flex items-center justify-center">
+      <div className="w-full h-[92vh] md:h-[72vh] flex items-center justify-center">
         <div className=" w-full md:w-[40%] flex flex-col items-center justify-center gap-9">
           <div className="bg-purple-500/10 rounded-xl p-3 cursor-pointer">
             <MessageSquare className="size-10 text-purple-900" />
