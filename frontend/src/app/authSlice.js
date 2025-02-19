@@ -1,7 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
+import { io } from "socket.io-client";
 
+export const socket = io("http://localhost:5000", {
+  autoConnect: false,
+  transports: ["websocket"],
+});
 
 export const getUser = createAsyncThunk(
   "auth/getUser",
@@ -20,9 +25,7 @@ export const signUp = createAsyncThunk(
   "auth/signUp",
   async (formData, { rejectWithValue }) => {
     try {
-      // console.log("Form Data in Signup Thunk: ",formData)
       const response = await axiosInstance.post("/users/signup", formData);
-      // console.log(response.data);
       toast.success(response.data.message);
       return response.data.data;
     } catch (error) {
@@ -37,7 +40,6 @@ export const login = createAsyncThunk(
   async (formData, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.post("/users/login", formData);
-      // console.log(response.data)
       toast.success(response.data.message);
       return response.data.data.user;
     } catch (error) {
@@ -88,8 +90,8 @@ export const changePassword = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       const response = await axiosInstance.update("/users/change-password");
-
       toast.success(response.data.message);
+      socket.connect();
       return response.data;
     } catch (error) {
       toast.error(error.response?.data?.message);
@@ -106,9 +108,10 @@ export const logout = createAsyncThunk(
     try {
       const response = await axiosInstance.post("/users/logout");
       toast.success(response.data.message);
+      socket.disconnect();
       return response.data.data.message;
     } catch (error) {
-      console.log("Error in SignUp: ", error.response);
+      console.log("Error in Logout: ", error.response);
       toast.error(error.response?.data?.message);
       return rejectWithValue(error.response?.data?.message || "Logout Failed");
     }
@@ -128,6 +131,8 @@ export const authSlice = createSlice({
     onlineUsers: [],
     error: null,
     isFetchingUser: false,
+    onlineUsers: [],
+    socketConnected: false,
   },
 
   extraReducers: (builder) => {
@@ -155,6 +160,7 @@ export const authSlice = createSlice({
         state.authUser = action.payload;
         state.isAuthenticated = true;
         state.isSigningUp = false;
+        state.socketConnected = true;
       })
       .addCase(signUp.rejected, (state, action) => {
         state.error = action.payload;
@@ -167,8 +173,10 @@ export const authSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.authUser = action.payload;
         console.log(state.authUser);
+        socket.connect();
         state.isAuthenticated = true;
         state.isLoggingIn = false;
+        state.socketConnected = true;
       })
       .addCase(login.rejected, (state) => {
         state.error = action.payload;
@@ -182,6 +190,7 @@ export const authSlice = createSlice({
         state.authUser = null;
         state.isLoggingOut = false;
         state.isAuthenticated = false;
+        state.socketConnected = false;
       })
       .addCase(logout.rejected, (state, action) => {
         state.error = action.payload;
