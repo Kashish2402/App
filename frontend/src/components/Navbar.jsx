@@ -4,16 +4,17 @@ import { Link, useNavigate } from "react-router-dom";
 import { Settings, User, LogOut } from "lucide-react";
 import { logout } from "../app/authSlice";
 
+
 function Navbar() {
   const { authUser, isAuthenticated } = useSelector((state) => state.auth);
 
   const navigate = useNavigate();
 
-  const dispatch=useDispatch()
+  const dispatch = useDispatch();
 
   const handleLogout = () => {
     dispatch(logout())
-    navigate('/')
+    navigate("/");
   };
 
   const handleSignup = (e) => {
@@ -64,7 +65,10 @@ function Navbar() {
               <span className="hidden sm:inline">Profile</span>
             </Link>
 
-            <button className="flex gap-2 items-center cursor-pointer" onClick={handleLogout}>
+            <button
+              className="flex gap-2 items-center cursor-pointer"
+              onClick={handleLogout}
+            >
               <LogOut className="size-5" />
               <span className="hidden sm:inline">Logout</span>
             </button>

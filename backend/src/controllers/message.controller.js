@@ -4,6 +4,7 @@ import { ApiError } from "../utils/ApiError.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import { User } from "../models/users.models.js";
 import { Message } from "../models/messages.models.js";
+import { getReceiverSocketId } from "../server.js";
 
 const getUserList = asyncHandler(async (req, res, next) => {
   const loggedInUser = req.user?._id;
@@ -67,9 +68,26 @@ const sendMessage = asyncHandler(async (req, res, next) => {
 
   if (!message) return next(new ApiError(400, "Unable to create Message"));
 
+  const recieverSocketId = getReceiverSocketId(recieverId);
+  if (recieverSocketId) {
+    io.to(recieverSocketId).emit("newMessage", message);
+  }
+
   return res
     .status(201)
     .json(new ApiResponse(201, message, "Message Sent Successfully!!"));
 });
 
-export { getUserList, getMessages, sendMessage };
+const deleteMessage = asyncHandler(async (req, res, next) => {
+  const { messageId } = req.params;
+
+  if (!messageId) return next(new ApiError(400, "No Message Selected"));
+
+  await Message.findByIdAndDelete(messageId);
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, {}, "Message Deleted Successfully!!"));
+});
+
+export { getUserList, getMessages, sendMessage, deleteMessage };

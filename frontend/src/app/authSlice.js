@@ -3,10 +3,10 @@ import { axiosInstance } from "../lib/axios";
 import toast from "react-hot-toast";
 import { io } from "socket.io-client";
 
-export const socket = io("http://localhost:5000", {
-  autoConnect: false,
-  transports: ["websocket"],
-});
+export const socket=io("http://localhost:5000",{
+  autoConnect:false,
+  transports:['websocket']
+})
 
 export const getUser = createAsyncThunk(
   "auth/getUser",
@@ -117,6 +117,7 @@ export const logout = createAsyncThunk(
     }
   }
 );
+
 export const authSlice = createSlice({
   name: "auth",
   initialState: {
@@ -128,13 +129,15 @@ export const authSlice = createSlice({
     isUpdatingPassword: false,
     isUpdatingProfilePic: false,
     isUpdatingUserDetails: false,
-    onlineUsers: [],
     error: null,
     isFetchingUser: false,
     onlineUsers: [],
     socketConnected: false,
   },
 
+  reducers: {
+    
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getUser.pending, (state) => {
@@ -161,6 +164,7 @@ export const authSlice = createSlice({
         state.isAuthenticated = true;
         state.isSigningUp = false;
         state.socketConnected = true;
+        socket.connect()
       })
       .addCase(signUp.rejected, (state, action) => {
         state.error = action.payload;
@@ -172,8 +176,7 @@ export const authSlice = createSlice({
       })
       .addCase(login.fulfilled, (state, action) => {
         state.authUser = action.payload;
-        console.log(state.authUser);
-        socket.connect();
+        socket.connect()
         state.isAuthenticated = true;
         state.isLoggingIn = false;
         state.socketConnected = true;
@@ -191,6 +194,7 @@ export const authSlice = createSlice({
         state.isLoggingOut = false;
         state.isAuthenticated = false;
         state.socketConnected = false;
+        socket.disconnect()
       })
       .addCase(logout.rejected, (state, action) => {
         state.error = action.payload;
@@ -224,6 +228,7 @@ export const authSlice = createSlice({
       })
       .addCase(changePassword.fulfilled, (state, action) => {
         state.isUpdatingPassword = false;
+        socket.connect();
       })
       .addCase(changePassword.rejected, (state, action) => {
         state.error = action.payload;
@@ -231,5 +236,7 @@ export const authSlice = createSlice({
       });
   },
 });
+
+
 
 export default authSlice.reducer;

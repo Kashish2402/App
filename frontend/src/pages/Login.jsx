@@ -6,6 +6,7 @@ import Password from "../components/Password";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../app/authSlice";
 
+
 function Login() {
   const [formData, setFormData] = useState({
     email: "",
@@ -17,7 +18,7 @@ function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(login(formData));
+    dispatch(login(formData))
   };
 
   return (
